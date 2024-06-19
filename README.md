@@ -1,1 +1,1 @@
-# Object_recognition
+# DeepNetCompression
