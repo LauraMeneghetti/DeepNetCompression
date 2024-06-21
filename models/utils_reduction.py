@@ -7,7 +7,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
-from sklearn import decomposition
 from scipy import linalg
 from models.ahosvd import AHOSVD
 
@@ -410,6 +409,7 @@ def train_kd(student,
     correct = 0.0
     batch_old = 0
     for batch_idx, (data, target) in enumerate(train_loader):
+        input_type = data.dtype
         data, target = data.to(device), target.to(device)
         batch = data.size()[0]
         optimizer.zero_grad()
@@ -417,8 +417,8 @@ def train_kd(student,
             output = student(data)
         else:
             output = student(data, features[batch_old : batch_old + batch, :])
+        teacher.to(dtype=input_type)
         output_teacher = teacher(data)
-        output_teacher = output_teacher[1]
         batch_old = batch
 
         # The Kullback-Leibler divergence loss measure

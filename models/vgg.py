@@ -160,12 +160,13 @@ class VGG(nn.Module):
         if self.classifier_str == 'standard':
             x = self.avgpool(x)
             x = torch.flatten(x, 1)
-            # or equivalently
-            # x = x.view(x.size(0), -1)
         elif self.classifier_str == 'cifar':
             x = torch.flatten(x, 1)
         x = self.classifier(x)
-        return conv4_3, x
+        if self.classifier_str == 'ssd':
+            return conv4_3, x
+        else:
+            return x
 
     def _initialize_weights(self):
         '''

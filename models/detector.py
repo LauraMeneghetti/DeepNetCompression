@@ -13,7 +13,7 @@ from tqdm import tqdm
 from PIL import ImageDraw, ImageFont
 
 from models.multibox_loss import MultiBoxLoss
-from models.utils import AverageMeter, clip_gradient, adjust_learning_rate, detect_objects, calculate_mAP, save_checkpoint_objdet, save_checkpoint_objdet_name
+from models.utils import AverageMeter, clip_gradient, adjust_learning_rate, detect_objects, calculate_mAP, save_checkpoint_objdet
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 

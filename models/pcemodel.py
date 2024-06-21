@@ -6,7 +6,6 @@ Expansion Layer (PCE).
 import torch
 import torch.nn as nn
 import scipy.misc
-from sklearn.linear_model import LinearRegression
 import numpy as np
 
 from torcheval.metrics import R2Score
@@ -147,21 +146,19 @@ class PCEModel(nn.Module):
         '''
         x = x.to(self.device)
         Phi = self.forward(x)
+        Phi = Phi.to(torch.float64)
 
-        if not isinstance(Phi, np.ndarray):
-            Phi = Phi.cpu().detach().numpy()
-        if not isinstance(y, np.ndarray):
-            y = y.cpu().detach().numpy()
-        if not isinstance(label, np.ndarray):
-            label = label.cpu().numpy()
+        device = 'cpu'
+        LR = linearRegression(Phi.size()[1], y.size()[1]).to(device)
 
-        LR = LinearRegression(fit_intercept=False).fit(Phi, y)
-        
         # Return the coefficient of determination R^2 of the prediction (float)
-        score_approx = LR.score(Phi, y)
-        coeff = LR.coef_.transpose()
-        y_PCE = Phi @ coeff
-        score_label = (label == torch.argmax(y_PCE, dim=1)).mean()
+        y_PCE = LR(Phi.to(device))
+        coeff = LR.linear.weight.float().t()
+        metric = R2Score()
+        metric.update(y_PCE, y.to(device))
+        score_approx = metric.compute()
+        score_label = 0
+        
         return coeff, score_approx, score_label
 
 

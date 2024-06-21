@@ -123,9 +123,9 @@ class AHOSVD():
         :return: list of U matrices coming from the modal SVDs
         :rtype: list[torch.Tensor]
         """
-        HOSVD = hosvd(batch_from_tensor.shape)
-        HOSVD.fit(batch_from_tensor, return_S_tensor = False, for_AHOSVD = True)
-        return HOSVD.modes_matrices
+        hosvd = HOSVD(batch_from_tensor.shape)
+        hosvd.fit(batch_from_tensor, return_S_tensor = False, for_AHOSVD = True)
+        return hosvd.modes_matrices
 
 
     def compute_u_matrices(self):
