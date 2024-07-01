@@ -12,7 +12,7 @@ from models.fnn import FNN, training_fnn
 from models.tensor_product_layer import tensor_product_layer
 from models.utils_reduction import PossibleCutIdx, spatial_gradients, forward_dataset, projection, forward_dataset_AHOSVD
 from models.ahosvd import AHOSVD
-from models.pcemodel import PCEModel
+#from models.pcemodel import PCEModel
 
 #from ATHENA.athena.active import ActiveSubspaces
 
@@ -178,33 +178,33 @@ class NetAdapter():
 
         return fnn
 
-    def _inout_mapping_PCE(self, matrix_red, out_postmodel, train_loader,
-                           train_labels):
-        '''
-        Function responsible for the creation of the input-output map using
-        the Polynomial Chaos Expansion method (PCE).
+    #def _inout_mapping_PCE(self, matrix_red, out_postmodel, train_loader,
+     #                      train_labels):
+    #    '''
+    #    Function responsible for the creation of the input-output map using
+     #   the Polynomial Chaos Expansion method (PCE).
+    # 
+    #    :param torch.tensor matrix_red: matrix containing the reduced output
+    #        of the pre-model.
+     #   :param nn.Sequential post_model: sequential model representing
+     #       the pre-model.
+     #   :param iterable train_loader: iterable object, it load the dataset for
+    #        training. It iterates over the given dataset, obtained combining a
+     #       dataset (images and labels) and a sampler.
+    #    :param torch.tensor train_labels: tensor representing the labels
+     #       associated to each image in the train dataset.
+     #   :return: trained model of PCE layer and PCE coeff
+    #   :rtype: list
+     #   '''
+     #   mean = torch.mean(matrix_red, 0).to(device)
+      #  var = torch.std(matrix_red, 0).to(device)
 
-        :param torch.tensor matrix_red: matrix containing the reduced output
-            of the pre-model.
-        :param nn.Sequential post_model: sequential model representing
-            the pre-model.
-        :param iterable train_loader: iterable object, it load the dataset for
-            training. It iterates over the given dataset, obtained combining a
-            dataset (images and labels) and a sampler.
-        :param torch.tensor train_labels: tensor representing the labels
-            associated to each image in the train dataset.
-        :return: trained model of PCE layer and PCE coeff
-        :rtype: list
-        '''
-        mean = torch.mean(matrix_red, 0).to(device)
-        var = torch.std(matrix_red, 0).to(device)
+      #  PCE_model = PCEModel(mean, var)
+    #    coeff = PCE_model.Training(matrix_red, out_postmodel,
+     #                              train_labels[:matrix_red.shape[0]])[0]
+      #  PCE_coeff = torch.FloatTensor(coeff).to(device)
 
-        PCE_model = PCEModel(mean, var)
-        coeff = PCE_model.Training(matrix_red, out_postmodel,
-                                   train_labels[:matrix_red.shape[0]])[0]
-        PCE_coeff = torch.FloatTensor(coeff).to(device)
-
-        return [PCE_model, PCE_coeff]
+     #   return [PCE_model, PCE_coeff]
 
     def _inout_mapping(self, matrix_red, n_class, out_model, train_labels,
                        train_loader):
@@ -232,9 +232,9 @@ class NetAdapter():
             #code for FNN
             inout_map = self._inout_mapping_FNN(matrix_red, train_labels, n_class) 
 
-        elif self.inout_method == 'PCE':
-            #code for PCE
-            inout_map = self._inout_mapping_PCE(matrix_red, out_model, train_loader, train_labels)
+        #elif self.inout_method == 'PCE':
+        #    #code for PCE
+        #    inout_map = self._inout_mapping_PCE(matrix_red, out_model, train_loader, train_labels)
         
         elif self.inout_method == 'None' or self.inout_method == None: # used for object detection
             inout_map = nn.Identity()
