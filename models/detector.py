@@ -266,7 +266,7 @@ class Detector(nn.Module):
             # One epoch's training
             loss_val = self.train_epoch(epoch=epoch)
             loss_values.extend([loss_val])
-            mAP_values.extend([10 * self.eval_detector(label_map, 'checkpoint_ssd300.pth.tar')]) 
+            #mAP_values.extend([10 * self.eval_detector(label_map, 'checkpoint_ssd300.pth.tar')]) 
             if epoch%500 == 0: 
                 place_holder = save_checkpoint_objdet(epoch, self.model, self.optimizer, 'checkpoint_ssd') 
                 #save_checkpoint_objdet(epoch, self.model, self.optimizer, f'checkpoint_ssd300_epoch_{epoch}.pth.tar')

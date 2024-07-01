@@ -7,7 +7,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
-from scipy import linalg
 from models.ahosvd import AHOSVD
 
 
@@ -50,6 +49,18 @@ def get_seq_model(model):
                                         [model.classifier]))
     return seq_model
 
+
+def get_seq_model_general(model):
+    features = list(model.features)
+    classifier = list(model.classifier)
+
+    # Combine features and classifier layers into a single list
+    combined_layers = features + [nn.Flatten()] + classifier
+
+    #Create a Sequential model
+    sequential_model = nn.Sequential(*combined_layers)
+
+    return sequential_model
 
 
 def PossibleCutIdx(seq_model):
